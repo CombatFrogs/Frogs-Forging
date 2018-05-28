@@ -4,7 +4,7 @@ import com.hoborific.cryo.smithcrafting.SmithcraftingMod
 import com.hoborific.cryo.smithcrafting.container.ContainerForgeAnvil
 import com.hoborific.cryo.smithcrafting.packet.PacketAnvilInteraction
 import com.hoborific.cryo.smithcrafting.packet.PacketHandler
-import com.hoborific.cryo.smithcrafting.smithing.WorkingTemplate
+import com.hoborific.cryo.smithcrafting.smithing.WorkingTemplate.WorkingTechnique
 import com.hoborific.cryo.smithcrafting.tileentities.TileEntityForgeAnvil
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
@@ -17,15 +17,15 @@ class GuiForgeAnvil(
     private val container: ContainerForgeAnvil
 ) : GuiContainer(container) {
 
-    val buttonMap = hashMapOf<WorkingTemplate.WorkingTechnique, Pair<Int, Int>>(
-        WorkingTemplate.WorkingTechnique.LIGHT_HIT to Pair(89, 51),
-        WorkingTemplate.WorkingTechnique.MEDIUM_HIT to Pair(107, 51),
-        WorkingTemplate.WorkingTechnique.HEAVY_HIT to Pair(89, 69),
-        WorkingTemplate.WorkingTechnique.DRAW to Pair(107, 69),
-        WorkingTemplate.WorkingTechnique.PUNCH to Pair(130, 51),
-        WorkingTemplate.WorkingTechnique.BEND to Pair(148, 51),
-        WorkingTemplate.WorkingTechnique.UPSET to Pair(130, 69),
-        WorkingTemplate.WorkingTechnique.SHRINK to Pair(148, 69)
+    private val buttonMap = hashMapOf(
+            WorkingTechnique.LIGHT_HIT to Pair(89, 51),
+            WorkingTechnique.MEDIUM_HIT to Pair(107, 51),
+            WorkingTechnique.HEAVY_HIT to Pair(89, 69),
+            WorkingTechnique.DRAW to Pair(107, 69),
+            WorkingTechnique.PUNCH to Pair(130, 51),
+            WorkingTechnique.BEND to Pair(148, 51),
+            WorkingTechnique.UPSET to Pair(130, 69),
+            WorkingTechnique.SHRINK to Pair(148, 69)
     )
 
     init {
@@ -41,24 +41,24 @@ class GuiForgeAnvil(
     override fun initGui() {
         super.initGui()
 
-        buttonMap.entries.forEach { buttonDef ->
+        buttonMap.entries.forEach { (anvilTechnique, position) ->
             buttonList.add(
                 CustomAnvilButton(
-                    buttonDef.key.ordinal,
-                    guiLeft + buttonDef.value.first,
-                    guiTop + buttonDef.value.second,
-                    16,
-                    16
+                        anvilTechnique,
+                        position.first,
+                        position.second,
+                        position.first + guiLeft,
+                        position.second + guiTop,
+                        16,
+                        16
                 )
             )
         }
     }
 
     override fun actionPerformed(button: GuiButton?) {
-        super.actionPerformed(button)
-        if (button == null || button.id > WorkingTemplate.WorkingTechnique.values().size) return
+        if (button == null || button.id > WorkingTechnique.values().size) return
 
-        val technique = WorkingTemplate.WorkingTechnique.values()[button.id]
         PacketHandler.networkInstance!!.sendToServer(PacketAnvilInteraction(container.windowId, button.id))
     }
 
@@ -69,8 +69,15 @@ class GuiForgeAnvil(
         private val background = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/forge_anvil.png")
     }
 
-    private class CustomAnvilButton(buttonId: Int, x: Int, y: Int, width: Int, height: Int) :
-        GuiButton(buttonId, x, y, width, height, "") {
+    private class CustomAnvilButton(
+            anvilTechnique: WorkingTechnique,
+            private val buttonTextureX: Int,
+            private val buttonTextureY: Int,
+            x: Int,
+            y: Int,
+            width: Int,
+            height: Int) :
+            GuiButton(anvilTechnique.ordinal, x, y, width, height, "") {
         val resourceLocation = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/custom_button.png")
 
         /**
@@ -81,9 +88,11 @@ class GuiForgeAnvil(
                 hovered = (mouseX in x..x + width) && (mouseY in y..y + height)
                 mc.textureManager.bindTexture(resourceLocation)
 
-                GlStateManager.disableDepth()
-                this.drawTexturedModalRect(x, y, if (hovered) 16 else 0, 0, width, height)
-                GlStateManager.enableDepth()
+                if (hovered) {
+                    GlStateManager.disableDepth()
+                    this.drawTexturedModalRect(x, y, buttonTextureX, buttonTextureY, width, height)
+                    GlStateManager.enableDepth()
+                }
             }
         }
     }

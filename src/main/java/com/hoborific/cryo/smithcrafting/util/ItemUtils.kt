@@ -5,7 +5,6 @@ import com.hoborific.cryo.smithcrafting.items.ItemSmithedPickaxe
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import kotlin.math.min
 
 fun setSmithedToolQuality(itemStack: ItemStack, quality: Int): Boolean {
     if (itemStack.item !is ItemSmithedPickaxe) {
@@ -14,7 +13,7 @@ fun setSmithedToolQuality(itemStack: ItemStack, quality: Int): Boolean {
     }
 
     val nbtData = itemStack.tagCompound ?: NBTTagCompound()
-    nbtData.setInteger(ItemSmithedPickaxe.TOOL_QUALITY_TAG, min(250, quality))
+    nbtData.setInteger(ItemSmithedPickaxe.TOOL_QUALITY_TAG, minOf(250, quality))
     itemStack.tagCompound = nbtData
 
     return true

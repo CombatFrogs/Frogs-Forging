@@ -8,9 +8,11 @@ import net.minecraft.inventory.Container
 import net.minecraft.inventory.IInventory
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraftforge.items.CapabilityItemHandler
+import net.minecraftforge.items.ItemStackHandler
 import net.minecraftforge.items.SlotItemHandler
-import kotlin.math.min
 
 class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntityForgeAnvil) : Container() {
 
@@ -26,6 +28,8 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
 
     private val anvilTechniqueQueue = ArrayList<WorkingTechnique>()
     private var anvilWorkingValue = 0
+
+    private val CURRENT_WORKING_VALUE_ID = 0
 
     init {
         addInternalInventorySlots()
@@ -51,7 +55,7 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
     private fun addInternalInventorySlots() {
         val itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
         val slotCoordinates = arrayOf(inputItemSlotCoords, toolsItemSlotCoords, fluxItemSlotCoords)
-        val numSlotsToRender = min(slotCoordinates.size, itemHandler!!.slots)
+        val numSlotsToRender = minOf(slotCoordinates.size, itemHandler!!.slots)
 
         for (itemIndex in 0 until numSlotsToRender) {
             addSlotToContainer(
@@ -113,11 +117,12 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
         }
 
         anvilWorkingValue -= technique.recipeModifier
+        listeners.forEach { it.sendWindowProperty(this, CURRENT_WORKING_VALUE_ID, anvilWorkingValue) }
 
         println("Working value: %d, Last technique: %s".format(anvilWorkingValue, technique.toString()))
 
         if (anvilWorkingValue !in 0..100) {
-            itemStackHandler.setStackInSlot(0, ItemStack.EMPTY)
+            replacePrimaryItemAndClearProgress(itemStackHandler, ItemStack.EMPTY)
             return
         }
 
@@ -130,9 +135,20 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
             if (anvilTechniqueQueue.size > 2) anvilTechniqueQueue[2] else null
         )
         if (replacementItemStack != null) {
-            itemStackHandler.setStackInSlot(0, replacementItemStack.copy())
-            anvilTechniqueQueue.clear()
-            anvilWorkingValue = 0
+            replacePrimaryItemAndClearProgress(itemStackHandler, replacementItemStack)
+        }
+    }
+
+    private fun replacePrimaryItemAndClearProgress(itemStackHandler: ItemStackHandler, replacementItemStack: ItemStack) {
+        itemStackHandler.setStackInSlot(0, replacementItemStack.copy())
+        anvilTechniqueQueue.clear()
+        anvilWorkingValue = 0
+    }
+
+    @SideOnly(Side.CLIENT)
+    override fun updateProgressBar(id: Int, data: Int) {
+        if (id == CURRENT_WORKING_VALUE_ID) {
+            anvilWorkingValue = data
         }
     }
 }
