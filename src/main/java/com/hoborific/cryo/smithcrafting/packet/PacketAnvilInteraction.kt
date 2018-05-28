@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
 
-
 class PacketAnvilInteraction(windowId: Int, buttonId: Int) : IMessage {
     var windowId: Int = windowId
         private set
@@ -41,9 +40,9 @@ class PacketAnvilInteraction(windowId: Int, buttonId: Int) : IMessage {
             val playerEntity = ctx.serverHandler.player
 
             val openContainer = playerEntity.openContainer ?: return
-            if (openContainer.windowId == message.windowId
-                && openContainer.getCanCraft(playerEntity)
-                && !playerEntity.isSpectator
+            if (openContainer.windowId == message.windowId &&
+                    openContainer.getCanCraft(playerEntity) &&
+                    !playerEntity.isSpectator
             ) {
                 if (openContainer !is ContainerForgeAnvil) return
 

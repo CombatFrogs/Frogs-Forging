@@ -20,7 +20,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
 
-
 @Mod.EventBusSubscriber
 open class CommonProxy {
     open fun preInit(e: FMLPreInitializationEvent) {

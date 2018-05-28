@@ -10,7 +10,6 @@ object ModBlockRegistry {
     @GameRegistry.ObjectHolder("smithcrafting:forge_anvil")
     var blockForgeAnvil: BlockForgeAnvil? = null
 
-
     @SideOnly(Side.CLIENT)
     fun initModels() {
         blockForgeAnvil!!.initModel()

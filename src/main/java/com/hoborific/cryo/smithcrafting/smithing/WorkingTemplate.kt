@@ -19,8 +19,8 @@ class WorkingTemplate constructor(
         HIT(0);
 
         fun matches(technique: WorkingTechnique?): Boolean {
-            return this == technique
-                    || (this == HIT && arrayOf(LIGHT_HIT, MEDIUM_HIT, HEAVY_HIT).contains(technique))
+            return this == technique ||
+                    (this == HIT && arrayOf(LIGHT_HIT, MEDIUM_HIT, HEAVY_HIT).contains(technique))
         }
     }
 

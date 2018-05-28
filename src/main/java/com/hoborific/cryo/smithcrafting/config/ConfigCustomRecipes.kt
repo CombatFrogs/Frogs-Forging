@@ -39,7 +39,6 @@ class ConfigCustomRecipes private constructor() {
             }
         }
 
-
         val configRecipes = configRoot["recipes"]
         if (configRecipes is JsonArray) {
             configRecipes.forEach processRecipe@{
@@ -54,7 +53,6 @@ class ConfigCustomRecipes private constructor() {
                 SmithcraftingMod.smithingRegistry.addRecipe(inputStackStr, outputStackStr, workTechs)
             }
         }
-
 
         val deformationMap = configRoot["deformation"]
         if (deformationMap is JsonObject) {

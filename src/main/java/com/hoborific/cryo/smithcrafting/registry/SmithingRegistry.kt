@@ -21,7 +21,7 @@ class SmithingRegistry {
         secondTech: WorkingTechnique?,
         thirdTech: WorkingTechnique?
     ) {
-        var workingTemplate = WorkingTemplate(identifier, firstTech, secondTech, thirdTech)
+        val workingTemplate = WorkingTemplate(identifier, firstTech, secondTech, thirdTech)
         registerTemplate(workingTemplate)
     }
 
@@ -48,7 +48,6 @@ class SmithingRegistry {
             null
         }
     }
-
 
     fun getTemplateWithIdentifier(identifier: String): WorkingTemplate? {
         return workingTemplateMap.getOrDefault(identifier, null)

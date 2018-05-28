@@ -76,7 +76,8 @@ class GuiForgeAnvil(
             x: Int,
             y: Int,
             width: Int,
-            height: Int) :
+            height: Int
+    ) :
             GuiButton(anvilTechnique.ordinal, x, y, width, height, "") {
         val resourceLocation = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/custom_button.png")
 
