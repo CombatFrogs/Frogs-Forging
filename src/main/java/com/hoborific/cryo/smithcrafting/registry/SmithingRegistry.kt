@@ -89,6 +89,27 @@ class SmithingRegistry {
         return null
     }
 
+    fun getOutputForConfigurationOrNull(
+        itemStack: ItemStack,
+        firstTech: Byte,
+        secondTech: Byte,
+        thirdTech: Byte
+    ): ItemStack? {
+        val recipes = getRecipesForInput(itemStack) ?: return null
+        recipes.entries.forEach { recipe ->
+            if (recipe.key.matchesPerformedWork(
+                    WorkingTechnique.fromByte(firstTech),
+                    WorkingTechnique.fromByte(secondTech),
+                    WorkingTechnique.fromByte(thirdTech)
+                )
+            ) {
+                return recipe.value
+            }
+        }
+
+        return null
+    }
+
     fun addRecipe(inputStackStr: String, outputStackStr: String, workTechs: WorkingTemplate) {
         println(
             "Registering recipe to craft %s using %s as input. Process: %s".format(

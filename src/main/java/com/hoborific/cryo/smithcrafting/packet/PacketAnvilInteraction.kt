@@ -41,8 +41,8 @@ class PacketAnvilInteraction(windowId: Int, buttonId: Int) : IMessage {
 
             val openContainer = playerEntity.openContainer ?: return
             if (openContainer.windowId == message.windowId &&
-                    openContainer.getCanCraft(playerEntity) &&
-                    !playerEntity.isSpectator
+                openContainer.getCanCraft(playerEntity) &&
+                !playerEntity.isSpectator
             ) {
                 if (openContainer !is ContainerForgeAnvil) return
 

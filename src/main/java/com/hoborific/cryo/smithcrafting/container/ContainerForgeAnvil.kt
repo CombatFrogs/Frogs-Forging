@@ -5,6 +5,7 @@ import com.hoborific.cryo.smithcrafting.smithing.WorkingTemplate.WorkingTechniqu
 import com.hoborific.cryo.smithcrafting.tileentities.TileEntityForgeAnvil
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Container
+import net.minecraft.inventory.IContainerListener
 import net.minecraft.inventory.IInventory
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
@@ -14,22 +15,22 @@ import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.ItemStackHandler
 import net.minecraftforge.items.SlotItemHandler
 
-class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntityForgeAnvil) : Container() {
+class ContainerForgeAnvil(playerInventory: IInventory, private val anvilTileEntity: TileEntityForgeAnvil) :
+    Container() {
+    companion object {
+        private const val playerSlotsVerticalOffset = 120
+        private const val toolbarAdditionalVerticalOffset = 58
+        private const val playerSlotsHorizontalOffset = 10
 
-    private val playerSlotsVerticalOffset = 120
-    private val toolbarAdditionalVerticalOffset = 58
-    private val playerSlotsHorizontalOffset = 10
+        private const val itemTextureDimensionWithSeparator = 18
 
-    private val itemTextureDimensionWithSeparator = 18
+        private const val CURRENT_WORKING_VALUE_ID = 0
+        private const val LAST_TECHNIQUE_USED_ID = 1
 
-    private val inputItemSlotCoords = Pair(48, 30)
-    private val toolsItemSlotCoords = Pair(9, 98)
-    private val fluxItemSlotCoords = Pair(155, 98)
-
-    private val anvilTechniqueQueue = ArrayList<WorkingTechnique>()
-    internal var anvilWorkingValue = 0
-
-    private val CURRENT_WORKING_VALUE_ID = 0
+        private val inputItemSlotCoords = Pair(48, 30)
+        private val toolsItemSlotCoords = Pair(9, 98)
+        private val fluxItemSlotCoords = Pair(155, 98)
+    }
 
     init {
         addInternalInventorySlots()
@@ -53,7 +54,7 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
     }
 
     private fun addInternalInventorySlots() {
-        val itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+        val itemHandler = this.anvilTileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
         val slotCoordinates = arrayOf(inputItemSlotCoords, toolsItemSlotCoords, fluxItemSlotCoords)
         val numSlotsToRender = minOf(slotCoordinates.size, itemHandler!!.slots)
 
@@ -96,11 +97,11 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
     }
 
     override fun canInteractWith(playerIn: EntityPlayer): Boolean {
-        return te.canInteractWith(playerIn)
+        return anvilTileEntity.canInteractWith(playerIn)
     }
 
     fun handleAnvilButtonPressed(buttonId: Int) {
-        val itemStackHandler = this.te.itemStackHandler
+        val itemStackHandler = this.anvilTileEntity.itemStackHandler
 
         val itemBeingWorked = itemStackHandler.getStackInSlot(0)
         if (itemBeingWorked.isEmpty) return
@@ -111,43 +112,50 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
         if (buttonId !in 0..WorkingTechnique.values().size) return
         val technique = WorkingTechnique.values()[buttonId]
 
-        anvilTechniqueQueue.add(technique)
-        while (anvilTechniqueQueue.size > 3) {
-            anvilTechniqueQueue.removeAt(0)
+        anvilTileEntity.handleTechniqueUsed(technique)
+
+        listeners.forEach {
+            it.sendWindowProperty(this, CURRENT_WORKING_VALUE_ID, anvilTileEntity.itemWorkingProgress)
+            it.sendWindowProperty(this, LAST_TECHNIQUE_USED_ID, buttonId)
         }
 
-        anvilWorkingValue -= technique.recipeModifier
-        listeners.forEach { it.sendWindowProperty(this, CURRENT_WORKING_VALUE_ID, anvilWorkingValue) }
+        println(
+            "Working value: %d, Last technique: %s".format(
+                anvilTileEntity.itemWorkingProgress,
+                technique.toString()
+            )
+        )
 
-        println("Working value: %d, Last technique: %s".format(anvilWorkingValue, technique.toString()))
-
-        if (anvilWorkingValue !in 0..100) {
+        if (anvilTileEntity.itemWorkingProgress !in 0..100) {
             replacePrimaryItemAndClearProgress(itemStackHandler, ItemStack.EMPTY)
             return
         }
 
         // TODO: return if anvilWorkingValue is not in range of target value i.e. in 50 - tolerance .. 50 + tolerance
-        if (anvilWorkingValue != 50) return
+        if (anvilTileEntity.itemWorkingProgress != 50) return
 
         val replacementItemStack: ItemStack? = smithingRegistry.getOutputForConfigurationOrNull(
             itemBeingWorked,
-            anvilTechniqueQueue[0],
-            if (anvilTechniqueQueue.size > 1) anvilTechniqueQueue[1] else null,
-            if (anvilTechniqueQueue.size > 2) anvilTechniqueQueue[2] else null
+            anvilTileEntity.techniqueList[2],
+            anvilTileEntity.techniqueList[1],
+            anvilTileEntity.techniqueList[0]
         )
+
         if (replacementItemStack != null) {
             replacePrimaryItemAndClearProgress(itemStackHandler, replacementItemStack)
         }
     }
 
-    private fun replacePrimaryItemAndClearProgress(itemStackHandler: ItemStackHandler, replacementItemStack: ItemStack) {
+    private fun replacePrimaryItemAndClearProgress(
+        itemStackHandler: ItemStackHandler,
+        replacementItemStack: ItemStack
+    ) {
         itemStackHandler.setStackInSlot(0, replacementItemStack.copy())
-        anvilTechniqueQueue.clear()
-        anvilWorkingValue = 0
+        anvilTileEntity.clearItemProgress()
     }
 
     fun shouldRenderProgressBar(): Boolean {
-        val itemStackHandler = this.te.itemStackHandler
+        val itemStackHandler = this.anvilTileEntity.itemStackHandler
         val itemBeingWorked = itemStackHandler.getStackInSlot(0)
         return !itemBeingWorked.isEmpty
     }
@@ -155,7 +163,24 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
     @SideOnly(Side.CLIENT)
     override fun updateProgressBar(id: Int, data: Int) {
         if (id == CURRENT_WORKING_VALUE_ID) {
-            anvilWorkingValue = data
+            anvilTileEntity.itemWorkingProgress = data
+            anvilTileEntity.markDirty()
+        } else if (id == LAST_TECHNIQUE_USED_ID) {
+            anvilTileEntity.handleTechniqueUsed(data, 0)
+        }
+    }
+
+    override fun addListener(listener: IContainerListener?) {
+        listener ?: return
+
+        super.addListener(listener)
+
+        listener.sendWindowProperty(this, CURRENT_WORKING_VALUE_ID, anvilTileEntity.itemWorkingProgress)
+        for (i in 1..anvilTileEntity.techniqueList.size) {
+            listener.sendWindowProperty(
+                this, LAST_TECHNIQUE_USED_ID,
+                anvilTileEntity.techniqueList[anvilTileEntity.techniqueList.size - i].toInt()
+            )
         }
     }
 }

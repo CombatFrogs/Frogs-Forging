@@ -11,7 +11,7 @@ import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.util.ResourceLocation
 
 class GuiForgeAnvil(
-    private val forgeAnvilTile: TileEntityForgeAnvil,
+    private val anvilTileEntity: TileEntityForgeAnvil,
     private val container: ContainerForgeAnvil
 ) : GuiContainer(container) {
 
@@ -50,7 +50,7 @@ class GuiForgeAnvil(
 
         mc.textureManager.bindTexture(overlays)
 
-        val progressPercentage = container.anvilWorkingValue / 100f
+        val progressPercentage = anvilTileEntity.itemWorkingProgress / 100f
         val translation = (progressPercentage - 0.5f) * gradientOverlayDimensions.assetWidth
 
         renderGuiOverlay(gradientOverlayDimensions)
