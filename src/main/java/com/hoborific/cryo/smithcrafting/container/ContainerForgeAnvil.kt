@@ -27,7 +27,7 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
     private val fluxItemSlotCoords = Pair(155, 98)
 
     private val anvilTechniqueQueue = ArrayList<WorkingTechnique>()
-    private var anvilWorkingValue = 0
+    internal var anvilWorkingValue = 0
 
     private val CURRENT_WORKING_VALUE_ID = 0
 
@@ -127,6 +127,7 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
         }
 
         // TODO: return if anvilWorkingValue is not in range of target value i.e. in 50 - tolerance .. 50 + tolerance
+        if (anvilWorkingValue != 50) return
 
         val replacementItemStack: ItemStack? = smithingRegistry.getOutputForConfigurationOrNull(
             itemBeingWorked,
@@ -143,6 +144,12 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val te: TileEntit
         itemStackHandler.setStackInSlot(0, replacementItemStack.copy())
         anvilTechniqueQueue.clear()
         anvilWorkingValue = 0
+    }
+
+    fun shouldRenderProgressBar(): Boolean {
+        val itemStackHandler = this.te.itemStackHandler
+        val itemBeingWorked = itemStackHandler.getStackInSlot(0)
+        return !itemBeingWorked.isEmpty
     }
 
     @SideOnly(Side.CLIENT)
