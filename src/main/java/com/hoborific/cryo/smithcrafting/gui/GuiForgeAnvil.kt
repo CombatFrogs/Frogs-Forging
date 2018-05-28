@@ -56,6 +56,24 @@ class GuiForgeAnvil(
         renderGuiOverlay(gradientOverlayDimensions)
         renderGuiOverlay(stationaryOverlayDimensions)
         renderGuiOverlayWithTranslation(slidingOverlayDimensions, translation.toInt())
+
+        mc.textureManager.bindTexture(buttonOverlay)
+        for (i in 1..anvilTileEntity.techniqueList.size) {
+            val j = anvilTileEntity.techniqueList[anvilTileEntity.techniqueList.size - i]
+            if (j !in WorkingTechnique.LIGHT_HIT.ordinal..WorkingTechnique.SHRINK.ordinal) {
+                continue
+            }
+            val coordsInTexture = buttonMap[WorkingTechnique.values()[j.toInt()]] ?: continue
+
+            drawTexturedModalRect(
+                guiLeft + previousWorkedTechniqueXCoords[i - 1],
+                guiTop + previousWorkedTechniqueYCoords,
+                coordsInTexture.first,
+                coordsInTexture.second,
+                13,
+                13
+            )
+        }
     }
 
     private fun renderGuiOverlayWithTranslation(overlay: GuiOverlayRenderDimensions, translation: Int) {
@@ -85,6 +103,7 @@ class GuiForgeAnvil(
 
         private val background = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/forge_anvil.png")
         private val overlays = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/anvil_overlays.png")
+        internal val buttonOverlay = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/custom_button.png")
 
         private val gradientOverlayDimensions = GuiOverlayRenderDimensions(30, 102, 0, 0, 119, 9)
         private val slidingOverlayDimensions = GuiOverlayRenderDimensions(84, 98, 0, 9, 11, 12)
@@ -100,6 +119,9 @@ class GuiForgeAnvil(
             WorkingTechnique.UPSET to Pair(130, 69),
             WorkingTechnique.SHRINK to Pair(148, 69)
         )
+
+        private val previousWorkedTechniqueYCoords = 32
+        private val previousWorkedTechniqueXCoords = arrayOf(96, 120, 144)
     }
 
     private class GuiOverlayRenderDimensions(

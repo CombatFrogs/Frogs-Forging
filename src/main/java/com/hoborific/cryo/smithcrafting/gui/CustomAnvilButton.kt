@@ -1,11 +1,9 @@
 package com.hoborific.cryo.smithcrafting.gui
 
-import com.hoborific.cryo.smithcrafting.SmithcraftingMod
 import com.hoborific.cryo.smithcrafting.smithing.WorkingTemplate
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.util.ResourceLocation
 
 internal class CustomAnvilButton(
     anvilTechnique: WorkingTemplate.WorkingTechnique,
@@ -20,7 +18,7 @@ internal class CustomAnvilButton(
     override fun drawButton(mc: Minecraft, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (visible) {
             hovered = (mouseX in x..x + width) && (mouseY in y..y + height)
-            mc.textureManager.bindTexture(buttonOverlay)
+            mc.textureManager.bindTexture(GuiForgeAnvil.buttonOverlay)
 
             if (hovered) {
                 GlStateManager.disableDepth()
@@ -28,9 +26,5 @@ internal class CustomAnvilButton(
                 GlStateManager.enableDepth()
             }
         }
-    }
-
-    companion object {
-        private val buttonOverlay = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/custom_button.png")
     }
 }
