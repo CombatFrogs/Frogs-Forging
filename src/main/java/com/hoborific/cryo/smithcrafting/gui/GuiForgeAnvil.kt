@@ -49,8 +49,10 @@ class GuiForgeAnvil(
 
         mc.textureManager.bindTexture(overlays)
 
-        val progressPercentage = anvilTileEntity.itemWorkingProgress / 100f
-        val translation = (progressPercentage - 0.5f) * gradientOverlayDimensions.assetWidth
+        val progressPercentage = (anvilTileEntity.itemWorkingProgress / 100f) - 0.5f
+        val translation =
+            (progressPercentage * gradientOverlayDimensions.assetWidth) - (0.5f * slidingOverlayDimensions.assetWidth)
+
 
         renderGuiOverlay(gradientOverlayDimensions)
         renderGuiOverlay(stationaryOverlayDimensions)

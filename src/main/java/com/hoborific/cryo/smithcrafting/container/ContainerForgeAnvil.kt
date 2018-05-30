@@ -152,6 +152,7 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val anvilTileEnti
     ) {
         itemStackHandler.setStackInSlot(0, replacementItemStack.copy())
         anvilTileEntity.clearItemProgress()
+        listeners.forEach { resetItemProgressVisual(it) }
     }
 
     fun shouldRenderProgressBar(): Boolean {
@@ -174,7 +175,10 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val anvilTileEnti
         listener ?: return
 
         super.addListener(listener)
+        resetItemProgressVisual(listener)
+    }
 
+    private fun resetItemProgressVisual(listener: IContainerListener) {
         listener.sendWindowProperty(this, CURRENT_WORKING_VALUE_ID, anvilTileEntity.itemWorkingProgress)
         for (i in 1..anvilTileEntity.techniqueList.size) {
             listener.sendWindowProperty(
