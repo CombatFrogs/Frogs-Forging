@@ -18,7 +18,7 @@ import net.minecraftforge.items.SlotItemHandler
 class ContainerForgeAnvil(playerInventory: IInventory, private val anvilTileEntity: TileEntityForgeAnvil) :
     Container() {
     companion object {
-        private const val playerSlotsVerticalOffset = 120
+        private const val playerSlotsVerticalOffset = 126
         private const val toolbarAdditionalVerticalOffset = 58
         private const val playerSlotsHorizontalOffset = 10
 
@@ -27,9 +27,9 @@ class ContainerForgeAnvil(playerInventory: IInventory, private val anvilTileEnti
         private const val CURRENT_WORKING_VALUE_ID = 0
         private const val LAST_TECHNIQUE_USED_ID = 1
 
-        private val inputItemSlotCoords = Pair(48, 30)
-        private val toolsItemSlotCoords = Pair(9, 98)
-        private val fluxItemSlotCoords = Pair(155, 98)
+        private val inputItemSlotCoords = Pair(48, 34)
+        private val toolsItemSlotCoords = Pair(9, 104)
+        private val fluxItemSlotCoords = Pair(155, 104)
     }
 
     init {

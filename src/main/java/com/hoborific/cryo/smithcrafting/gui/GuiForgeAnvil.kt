@@ -45,7 +45,6 @@ class GuiForgeAnvil(
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.drawScreen(mouseX, mouseY, partialTicks)
-
         if (!container.shouldRenderProgressBar()) return
 
         mc.textureManager.bindTexture(overlays)
@@ -105,23 +104,23 @@ class GuiForgeAnvil(
         private val overlays = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/anvil_overlays.png")
         internal val buttonOverlay = ResourceLocation(SmithcraftingMod.MODID, "textures/gui/custom_button.png")
 
-        private val gradientOverlayDimensions = GuiOverlayRenderDimensions(30, 102, 0, 0, 119, 9)
-        private val slidingOverlayDimensions = GuiOverlayRenderDimensions(84, 98, 0, 9, 11, 12)
-        private val stationaryOverlayDimensions = GuiOverlayRenderDimensions(84, 106, 11, 9, 11, 10)
+        private val gradientOverlayDimensions = GuiOverlayRenderDimensions(30, 108, 0, 0, 119, 9)
+        private val slidingOverlayDimensions = GuiOverlayRenderDimensions(89, 104, 0, 9, 11, 12)
+        private val stationaryOverlayDimensions = GuiOverlayRenderDimensions(89, 112, 11, 9, 11, 10)
 
         private val buttonMap = hashMapOf(
-            WorkingTechnique.LIGHT_HIT to Pair(89, 51),
-            WorkingTechnique.MEDIUM_HIT to Pair(107, 51),
-            WorkingTechnique.HEAVY_HIT to Pair(89, 69),
-            WorkingTechnique.DRAW to Pair(107, 69),
-            WorkingTechnique.PUNCH to Pair(130, 51),
-            WorkingTechnique.BEND to Pair(148, 51),
-            WorkingTechnique.UPSET to Pair(130, 69),
-            WorkingTechnique.SHRINK to Pair(148, 69)
+            WorkingTechnique.LIGHT_HIT to Pair(88, 57),
+            WorkingTechnique.MEDIUM_HIT to Pair(106, 57),
+            WorkingTechnique.HEAVY_HIT to Pair(89, 75),
+            WorkingTechnique.DRAW to Pair(107, 75),
+            WorkingTechnique.PUNCH to Pair(130, 57),
+            WorkingTechnique.BEND to Pair(148, 57),
+            WorkingTechnique.UPSET to Pair(130, 75),
+            WorkingTechnique.SHRINK to Pair(148, 75)
         )
 
-        private val previousWorkedTechniqueYCoords = 32
-        private val previousWorkedTechniqueXCoords = arrayOf(96, 120, 144)
+        private val previousWorkedTechniqueYCoords = 35
+        private val previousWorkedTechniqueXCoords = arrayOf(93, 118, 143)
     }
 
     private class GuiOverlayRenderDimensions(
