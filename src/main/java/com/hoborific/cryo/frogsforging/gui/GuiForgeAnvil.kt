@@ -49,9 +49,9 @@ class GuiForgeAnvil(
 
         mc.textureManager.bindTexture(overlays)
 
-        val progressPercentage = (anvilTileEntity.itemWorkingProgress / 100f) - 0.5f
-        val translation =
-            (progressPercentage * gradientOverlayDimensions.assetWidth) - (0.5f * slidingOverlayDimensions.assetWidth)
+        val progressPercentage = (anvilTileEntity.itemWorkingProgress / 100f)
+        val positionOfCenterMark = (progressPercentage * gradientOverlayDimensions.assetWidth)
+        val translation = positionOfCenterMark
 
         renderGuiOverlay(gradientOverlayDimensions)
         renderGuiOverlay(stationaryOverlayDimensions)
@@ -113,9 +113,9 @@ class GuiForgeAnvil(
         private val gradientOverlayDimensions =
             GuiOverlayRenderDimensions(30, 108, 0, 0, 119, 9)
         private val slidingOverlayDimensions =
-            GuiOverlayRenderDimensions(89, 104, 0, 9, 11, 12)
+            GuiOverlayRenderDimensions(25, 104, 0, 9, 11, 12)
         private val stationaryOverlayDimensions =
-            GuiOverlayRenderDimensions(89, 112, 11, 9, 11, 10)
+            GuiOverlayRenderDimensions(84, 112, 11, 9, 11, 10)
 
         private val buttonMap = hashMapOf(
             WorkingTechnique.LIGHT_HIT to Pair(88, 57),
