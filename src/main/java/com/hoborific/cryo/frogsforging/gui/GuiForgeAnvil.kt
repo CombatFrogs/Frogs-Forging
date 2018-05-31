@@ -48,14 +48,12 @@ class GuiForgeAnvil(
         if (!container.shouldRenderProgressBar()) return
 
         mc.textureManager.bindTexture(overlays)
-
         val progressPercentage = (anvilTileEntity.itemWorkingProgress / 100f)
         val positionOfCenterMark = (progressPercentage * gradientOverlayDimensions.assetWidth)
-        val translation = positionOfCenterMark
 
         renderGuiOverlay(gradientOverlayDimensions)
         renderGuiOverlay(stationaryOverlayDimensions)
-        renderGuiOverlayWithTranslation(slidingOverlayDimensions, translation.toInt())
+        renderGuiOverlayWithTranslation(slidingOverlayDimensions, positionOfCenterMark.toInt())
 
         mc.textureManager.bindTexture(buttonOverlay)
         for (i in 1..anvilTileEntity.techniqueList.size) {
@@ -70,8 +68,8 @@ class GuiForgeAnvil(
                 guiTop + previousWorkedTechniqueYCoords,
                 coordsInTexture.first,
                 coordsInTexture.second,
-                13,
-                13
+                16,
+                16
             )
         }
     }
