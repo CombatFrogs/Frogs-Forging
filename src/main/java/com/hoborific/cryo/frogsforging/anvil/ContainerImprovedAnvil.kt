@@ -1,6 +1,5 @@
 package com.hoborific.cryo.frogsforging.anvil
 
-import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import com.teamwizardry.librarianlib.features.container.ContainerBase
 import com.teamwizardry.librarianlib.features.container.GuiHandler
 import com.teamwizardry.librarianlib.features.container.InventoryWrapper
@@ -11,9 +10,10 @@ import net.minecraft.util.ResourceLocation
 /**
  *
  */
-class ContainerImprovedAnvil(player: EntityPlayer, tile: TileEntityImprovedAnvil) : ContainerBase(player) {
+class ContainerImprovedAnvil(player: EntityPlayer, internal val anvilTile: TileEntityImprovedAnvil) :
+    ContainerBase(player) {
     val invPlayer = BaseWrappers.player(player)
-    val invBlock = InventoryWrapperImprovedAnvil(tile)
+    val invBlock = InventoryWrapperImprovedAnvil(anvilTile)
 
     init {
         addSlots(invPlayer)
@@ -21,9 +21,6 @@ class ContainerImprovedAnvil(player: EntityPlayer, tile: TileEntityImprovedAnvil
 
         transferRule().from(invPlayer.main).deposit(invBlock.main)
         transferRule().from(invBlock.main).deposit(invPlayer.main)
-    }
-
-    internal fun handleButtonPressed(technique: WorkingTechnique) {
     }
 
     companion object {

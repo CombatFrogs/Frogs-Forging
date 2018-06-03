@@ -2,6 +2,7 @@ package com.hoborific.cryo.frogsforging.proxy
 
 import com.hoborific.cryo.frogsforging.FrogsForgingMod
 import com.hoborific.cryo.frogsforging.anvil.BlockImprovedAnvil
+import com.hoborific.cryo.frogsforging.anvil.PacketAnvilTechnique
 import com.hoborific.cryo.frogsforging.blocks.BlockForgeAnvil
 import com.hoborific.cryo.frogsforging.items.ItemForgeHammer
 import com.hoborific.cryo.frogsforging.items.ItemSmithedPickaxe
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.relauncher.Side
 
 @Mod.EventBusSubscriber
 open class CommonProxy {
@@ -31,6 +33,11 @@ open class CommonProxy {
         NetworkRegistry.INSTANCE.registerGuiHandler(
             FrogsForgingMod.instance,
             GuiProxy()
+        )
+
+        com.teamwizardry.librarianlib.features.network.PacketHandler.register(
+            PacketAnvilTechnique::class.java,
+            Side.SERVER
         )
     }
 

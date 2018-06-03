@@ -6,6 +6,7 @@ import com.teamwizardry.librarianlib.features.gui.component.GuiComponentEvents
 import com.teamwizardry.librarianlib.features.gui.components.ComponentSprite
 import com.teamwizardry.librarianlib.features.guicontainer.ComponentSlot
 import com.teamwizardry.librarianlib.features.guicontainer.GuiContainerBase
+import com.teamwizardry.librarianlib.features.network.PacketHandler
 import com.teamwizardry.librarianlib.features.sprite.Sprite
 import com.teamwizardry.librarianlib.features.sprite.Texture
 import net.minecraft.util.ResourceLocation
@@ -17,7 +18,9 @@ const val improvedAnvilRegistryName = "improved_forge_anvil"
  * inventory and hotbat, as well as the Anvil's three inventory slots, buttons to perform forging techniques and a
  * progress bar which indicates how close the player is to successfully forging the desired tool.
  */
-class GuiContainerImprovedAnvil(val anvilContainer: ContainerImprovedAnvil) : GuiContainerBase(
+class GuiContainerImprovedAnvil(
+    private val anvilContainer: ContainerImprovedAnvil
+) : GuiContainerBase(
     anvilContainer,
     WIDTH,
     HEIGHT
@@ -27,6 +30,7 @@ class GuiContainerImprovedAnvil(val anvilContainer: ContainerImprovedAnvil) : Gu
     private val componentHammerItemSlot: ComponentSlot
     private val componentFluxItemSlot: ComponentSlot
     private val componentTechniqueButtons: ArrayList<ComponentSprite> = ArrayList()
+    private val componentTechniqueHistory: Array<ComponentSprite>
 
     init {
         componentBackground = ComponentSprite(
@@ -46,8 +50,19 @@ class GuiContainerImprovedAnvil(val anvilContainer: ContainerImprovedAnvil) : Gu
             componentFluxItemSlot
         )
 
+        componentTechniqueHistory = Array(3, {
+            ComponentSprite(
+                null,
+                techniqueHistoryHorizontalOffsets[it],
+                techniqueHistoryVerticalOffset,
+                BUTTON_WIDTH,
+                BUTTON_HEIGHT
+            )
+        })
+
         addPlayerInventory(anvilContainer)
         addTechniqueButtons()
+        componentTechniqueHistory.forEach { mainComponents.add(it) }
     }
 
     private fun addTechniqueButtons() {
@@ -62,11 +77,33 @@ class GuiContainerImprovedAnvil(val anvilContainer: ContainerImprovedAnvil) : Gu
             })
             techniqueSprite.BUS.hook(GuiComponentEvents.MouseClickEvent::class.java, { _ ->
                 // Forward event to the backing container instance.
-                anvilContainer.handleButtonPressed(technique)
+                PacketHandler.NETWORK.sendToServer(
+                    PacketAnvilTechnique(
+                        technique.ordinal,
+                        anvilContainer.anvilTile.pos
+                    )
+                )
             })
 
             componentTechniqueButtons.add(techniqueSprite)
             mainComponents.add(techniqueSprite)
+        }
+    }
+
+    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        updateSpritesForTechniqueHistory()
+
+        super.drawScreen(mouseX, mouseY, partialTicks)
+    }
+
+    private fun updateSpritesForTechniqueHistory() {
+        val anvilHistory = anvilContainer.anvilTile.publicAnvilHistory
+        for (spriteIndex in 0 until componentTechniqueHistory.size) {
+            val historyIndex = componentTechniqueHistory.size - spriteIndex - 1
+            if (anvilHistory[historyIndex] in WorkingTechnique.LIGHT_HIT.ordinal..WorkingTechnique.SHRINK.ordinal) {
+                val techniqueForSlot = WorkingTechnique.values()[anvilHistory[historyIndex].toInt()]
+                componentTechniqueHistory[spriteIndex].sprite = buttonMap[techniqueForSlot]?.sprite
+            }
         }
     }
 
@@ -99,6 +136,10 @@ class GuiContainerImprovedAnvil(val anvilContainer: ContainerImprovedAnvil) : Gu
             WIDTH,
             HEIGHT
         )
+
+        //
+        val techniqueHistoryHorizontalOffsets: Array<Int> = arrayOf(93, 118, 143)
+        val techniqueHistoryVerticalOffset: Int = 35
 
         // Some magic numbers for positioning the player's inventory slots in the GUI.
         private const val playerSlotsVerticalOffset = 126
