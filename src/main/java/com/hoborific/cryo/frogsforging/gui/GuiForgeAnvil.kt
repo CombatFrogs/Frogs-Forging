@@ -4,7 +4,7 @@ import com.hoborific.cryo.frogsforging.FrogsForgingMod
 import com.hoborific.cryo.frogsforging.container.ContainerForgeAnvil
 import com.hoborific.cryo.frogsforging.packet.PacketAnvilInteraction
 import com.hoborific.cryo.frogsforging.packet.PacketHandler
-import com.hoborific.cryo.frogsforging.smithing.WorkingTemplate.WorkingTechnique
+import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import com.hoborific.cryo.frogsforging.tileentities.TileEntityForgeAnvil
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.inventory.GuiContainer

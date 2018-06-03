@@ -1,12 +1,12 @@
 package com.hoborific.cryo.frogsforging.gui
 
-import com.hoborific.cryo.frogsforging.smithing.WorkingTemplate
+import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.renderer.GlStateManager
 
 internal class CustomAnvilButton(
-    anvilTechnique: WorkingTemplate.WorkingTechnique,
+    anvilTechnique: WorkingTechnique,
     private val buttonTextureX: Int,
     private val buttonTextureY: Int,
     x: Int,

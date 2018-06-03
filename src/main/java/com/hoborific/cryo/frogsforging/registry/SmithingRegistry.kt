@@ -1,8 +1,8 @@
 package com.hoborific.cryo.frogsforging.registry
 
 import com.hoborific.cryo.frogsforging.FrogsForgingMod
+import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import com.hoborific.cryo.frogsforging.smithing.WorkingTemplate
-import com.hoborific.cryo.frogsforging.smithing.WorkingTemplate.WorkingTechnique
 import com.hoborific.cryo.frogsforging.util.getStackFromConfigString
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack

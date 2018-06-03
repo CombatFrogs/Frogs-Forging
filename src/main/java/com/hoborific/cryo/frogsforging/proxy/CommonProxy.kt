@@ -1,6 +1,7 @@
 package com.hoborific.cryo.frogsforging.proxy
 
 import com.hoborific.cryo.frogsforging.FrogsForgingMod
+import com.hoborific.cryo.frogsforging.anvil.BlockImprovedAnvil
 import com.hoborific.cryo.frogsforging.blocks.BlockForgeAnvil
 import com.hoborific.cryo.frogsforging.items.ItemForgeHammer
 import com.hoborific.cryo.frogsforging.items.ItemSmithedPickaxe
@@ -52,6 +53,7 @@ open class CommonProxy {
         @SubscribeEvent
         fun registerBlocks(event: RegistryEvent.Register<Block>) {
             event.registry.register(BlockForgeAnvil())
+            event.registry.register(BlockImprovedAnvil())
             GameRegistry.registerTileEntity(
                 TileEntityForgeAnvil::class.java,
                 ResourceLocation(FrogsForgingMod.MODID, "forge_anvil")

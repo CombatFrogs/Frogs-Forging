@@ -6,36 +6,6 @@ class WorkingTemplate constructor(
     private val secondTech: WorkingTechnique?,
     private val thirdTech: WorkingTechnique?
 ) {
-    enum class WorkingTechnique(val recipeModifier: Int) {
-
-        LIGHT_HIT(3),
-        MEDIUM_HIT(6),
-        HEAVY_HIT(9),
-        DRAW(15),
-        PUNCH(-2),
-        BEND(-7),
-        UPSET(-13),
-        SHRINK(-16),
-        HIT(0),
-        ANY(0);
-
-        fun matches(technique: WorkingTechnique?): Boolean {
-            return this == technique ||
-                (this == HIT && arrayOf(
-                    LIGHT_HIT,
-                    MEDIUM_HIT,
-                    HEAVY_HIT
-                ).contains(technique)) ||
-                this == ANY
-        }
-
-        companion object {
-            internal fun fromByte(nbtValue: Byte): WorkingTechnique? {
-                if (nbtValue !in 0..WorkingTechnique.values().size) return ANY
-                return WorkingTechnique.values()[nbtValue.toInt()]
-            }
-        }
-    }
 
     override fun toString(): String {
         return "TECHNIQUE ID: %s\tN: %s, N-1: %s, N-2: %s".format(identifier, thirdTech, secondTech, firstTech)

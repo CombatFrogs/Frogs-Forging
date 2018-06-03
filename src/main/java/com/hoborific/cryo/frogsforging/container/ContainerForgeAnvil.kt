@@ -1,7 +1,7 @@
 package com.hoborific.cryo.frogsforging.container
 
 import com.hoborific.cryo.frogsforging.registry.SmithingRegistry
-import com.hoborific.cryo.frogsforging.smithing.WorkingTemplate.WorkingTechnique
+import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import com.hoborific.cryo.frogsforging.tileentities.TileEntityForgeAnvil
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Container

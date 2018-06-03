@@ -1,0 +1,17 @@
+{
+  "spritesheet": {
+    "textureWidth": 256,
+    "textureHeight": 256,
+    "sprites": {
+      "background": [0, 0, 180, 208],
+      "light_hit": [88, 212, 16, 16],
+      "medium_hit": [106, 212, 16, 16],
+      "heavy_hit": [88, 230, 16, 16],
+      "draw": [106, 230, 16, 16],
+      "punch": [130, 212, 16, 16],
+      "bend": [148, 212, 16, 16],
+      "upset": [130, 230, 16, 16],
+      "shrink": [148, 230, 16, 16]
+    }
+  }
+}

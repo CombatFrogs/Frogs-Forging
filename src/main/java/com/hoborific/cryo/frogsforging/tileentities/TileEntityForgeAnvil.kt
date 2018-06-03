@@ -1,6 +1,6 @@
 package com.hoborific.cryo.frogsforging.tileentities
 
-import com.hoborific.cryo.frogsforging.smithing.WorkingTemplate.WorkingTechnique
+import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
