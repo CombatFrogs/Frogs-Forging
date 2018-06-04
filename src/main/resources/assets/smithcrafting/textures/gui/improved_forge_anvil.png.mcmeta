@@ -1,9 +1,12 @@
 {
   "spritesheet": {
     "textureWidth": 256,
-    "textureHeight": 256,
+    "textureHeight": 384,
     "sprites": {
       "background": [0, 0, 180, 208],
+      "status_bar": [0, 248, 119, 9],
+      "static_indicator": [11, 257, 11, 10],
+      "sliding_indicator": [0, 257, 11, 11],
       "light_hit": [88, 212, 16, 16],
       "medium_hit": [106, 212, 16, 16],
       "heavy_hit": [88, 230, 16, 16],

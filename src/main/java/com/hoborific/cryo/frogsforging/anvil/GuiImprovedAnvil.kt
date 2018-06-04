@@ -1,15 +1,19 @@
 package com.hoborific.cryo.frogsforging.anvil
 
 import com.hoborific.cryo.frogsforging.FrogsForgingMod
+import com.hoborific.cryo.frogsforging.registry.SmithingRegistry
 import com.hoborific.cryo.frogsforging.smithing.WorkingTechnique
 import com.teamwizardry.librarianlib.features.gui.component.GuiComponentEvents
 import com.teamwizardry.librarianlib.features.gui.components.ComponentSprite
 import com.teamwizardry.librarianlib.features.guicontainer.ComponentSlot
 import com.teamwizardry.librarianlib.features.guicontainer.GuiContainerBase
+import com.teamwizardry.librarianlib.features.kotlin.width
+import com.teamwizardry.librarianlib.features.math.Vec2d
 import com.teamwizardry.librarianlib.features.network.PacketHandler
 import com.teamwizardry.librarianlib.features.sprite.Sprite
 import com.teamwizardry.librarianlib.features.sprite.Texture
 import net.minecraft.util.ResourceLocation
+import kotlin.math.ceil
 
 const val improvedAnvilRegistryName = "improved_forge_anvil"
 
@@ -26,9 +30,9 @@ class GuiContainerImprovedAnvil(
     HEIGHT
 ) {
     private val componentBackground: ComponentSprite
-    private val componentWorkingItemSlot: ComponentSlot
-    private val componentHammerItemSlot: ComponentSlot
-    private val componentFluxItemSlot: ComponentSlot
+    private val componentProgressGradient: ComponentSprite
+    private val componentStaticIndicator: ComponentSprite
+    private val componentSlidingIndicator: ComponentSprite
     private val componentTechniqueButtons: ArrayList<ComponentSprite> = ArrayList()
     private val componentTechniqueHistory: Array<ComponentSprite>
 
@@ -39,15 +43,28 @@ class GuiContainerImprovedAnvil(
             HEIGHT
         )
 
-        componentWorkingItemSlot = ComponentSlot(anvilContainer.invBlock.slots[0], 48, 34)
-        componentHammerItemSlot = ComponentSlot(anvilContainer.invBlock.slots[1], 9, 104)
-        componentFluxItemSlot = ComponentSlot(anvilContainer.invBlock.slots[2], 155, 104)
+        val componentWorkingItemSlot = ComponentSlot(anvilContainer.invBlock.slots[0], 48, 34)
+        val componentHammerItemSlot = ComponentSlot(anvilContainer.invBlock.slots[1], 9, 104)
+        val componentFluxItemSlot = ComponentSlot(anvilContainer.invBlock.slots[2], 155, 104)
+
+        componentProgressGradient = ComponentSprite(
+            spriteSheet.getSprite("status_bar", 119, 9), 30, 108, 119, 9
+        )
+        componentStaticIndicator = ComponentSprite(
+            spriteSheet.getSprite("static_indicator", 11, 10), 84, 112, 11, 10
+        )
+        componentSlidingIndicator = ComponentSprite(
+            spriteSheet.getSprite("sliding_indicator", 11, 11), 24, 104, 11, 11
+        )
 
         mainComponents.add(
             componentBackground,
             componentWorkingItemSlot,
             componentHammerItemSlot,
-            componentFluxItemSlot
+            componentFluxItemSlot,
+            componentProgressGradient,
+            componentStaticIndicator,
+            componentSlidingIndicator
         )
 
         componentTechniqueHistory = Array(3, {
@@ -92,8 +109,32 @@ class GuiContainerImprovedAnvil(
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updateSpritesForTechniqueHistory()
+        updateWorkingStatusIndicators()
 
         super.drawScreen(mouseX, mouseY, partialTicks)
+    }
+
+    private fun updateWorkingStatusIndicators() {
+        val itemBeingWorked = anvilContainer.anvilTile.getStackInSlot(0)
+        if (!itemBeingWorked.isEmpty) {
+            val smithingRegistry = SmithingRegistry.getInstance()
+            val craftingResultMap = smithingRegistry.itemRecipeMap[Pair(itemBeingWorked.item, itemBeingWorked.metadata)]
+            if (craftingResultMap != null && craftingResultMap.isNotEmpty()) {
+                componentProgressGradient.isVisible = true
+                componentStaticIndicator.isVisible = true
+                componentSlidingIndicator.isVisible = true
+
+                val progressPercentage = (anvilContainer.anvilTile.anvilWorkingValue / 100f)
+                val positionOfCenterMark = ceil(progressPercentage * componentProgressGradient.width)
+                componentSlidingIndicator.transform.postTranslate = Vec2d(positionOfCenterMark.toDouble(), 0.0)
+
+                return
+            }
+        }
+
+        componentProgressGradient.isVisible = false
+        componentStaticIndicator.isVisible = false
+        componentSlidingIndicator.isVisible = false
     }
 
     private fun updateSpritesForTechniqueHistory() {
@@ -139,7 +180,7 @@ class GuiContainerImprovedAnvil(
 
         //
         val techniqueHistoryHorizontalOffsets: Array<Int> = arrayOf(93, 118, 143)
-        val techniqueHistoryVerticalOffset: Int = 35
+        const val techniqueHistoryVerticalOffset: Int = 35
 
         // Some magic numbers for positioning the player's inventory slots in the GUI.
         private const val playerSlotsVerticalOffset = 126

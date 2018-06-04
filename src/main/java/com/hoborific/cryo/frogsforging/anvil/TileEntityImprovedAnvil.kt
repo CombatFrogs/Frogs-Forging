@@ -28,7 +28,8 @@ import java.util.UUID
 @TileRegister(improvedAnvilRegistryName)
 class TileEntityImprovedAnvil : TileModInventory(anvilInventorySize) {
     @Save
-    private var anvilWorkingValue: Int = 0
+    internal var anvilWorkingValue: Int = 0
+        private set
 
     @Save
     private val anvilTechniqueHistory: ArrayList<Byte> = arrayListOf(-1, -1, -1)
