@@ -1,6 +1,5 @@
 package com.hoborific.cryo.frogsforging.proxy
 
-import com.hoborific.cryo.frogsforging.registry.ModBlockRegistry
 import com.hoborific.cryo.frogsforging.registry.ModItemRegistry
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.fml.common.Mod
@@ -14,9 +13,8 @@ class ClientProxy : CommonProxy() {
 
         @JvmStatic
         @SubscribeEvent
-        fun registerModels(event: ModelRegistryEvent) {
+        fun registerModels(unusedEvent: ModelRegistryEvent) {
             ModItemRegistry.initModels()
-            ModBlockRegistry.initModels()
         }
     }
 }
