@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "smithcrafting:items/forge_hammer"
+    "layer0": "frogsforging:items/forge_hammer"
   }
 }

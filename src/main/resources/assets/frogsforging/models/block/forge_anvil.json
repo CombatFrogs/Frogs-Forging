@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "smithcrafting:blocks/forge_anvil"
+    "all": "frogsforging:blocks/forge_anvil"
   }
 }

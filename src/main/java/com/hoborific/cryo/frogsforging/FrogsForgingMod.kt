@@ -20,9 +20,9 @@ import org.apache.logging.log4j.Logger
     modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter"
 )
 object FrogsForgingMod {
-    const val MODID = "smithcrafting"
-    const val MODNAME = "SmithCrafting"
-    const val VERSION = "0.0.1"
+    const val MODID = "frogsforging"
+    const val MODNAME = "Frogs' Forging"
+    const val VERSION = "0.0.2"
 
     @SidedProxy(
         clientSide = "com.hoborific.cryo.frogsforging.proxy.ClientProxy",

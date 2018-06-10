@@ -25,8 +25,8 @@ import java.util.UUID
  * the current item forging progress, a partial history of applied techniques to perform recipe matching, and (TBA) the
  * selected item to match crafting with, to prevent accidentally finalizing an item into an undesired shape.
  */
-@TileRegister(improvedAnvilRegistryName)
-class TileEntityImprovedAnvil : TileModInventory(anvilInventorySize) {
+@TileRegister(forgeAnvilRegistryName)
+class TileEntityForgeAnvil : TileModInventory(anvilInventorySize) {
     @Save
     internal var anvilWorkingValue: Int = 0
         private set
@@ -113,10 +113,10 @@ class TileEntityImprovedAnvil : TileModInventory(anvilInventorySize) {
 /**
  * It's a block. You weren't actually expecting documentation, were you?
  */
-class BlockImprovedAnvil : BlockModContainer(improvedAnvilRegistryName, Material.IRON) {
+class BlockForgeAnvil : BlockModContainer(forgeAnvilRegistryName, Material.IRON) {
 
     override fun createTileEntity(world: World, state: IBlockState): TileEntity? {
-        return TileEntityImprovedAnvil()
+        return TileEntityForgeAnvil()
     }
 
     override fun onBlockActivated(
@@ -130,7 +130,7 @@ class BlockImprovedAnvil : BlockModContainer(improvedAnvilRegistryName, Material
         hitY: Float,
         hitZ: Float
     ): Boolean {
-        GuiHandler.open(ContainerImprovedAnvil.NAME, playerIn, pos)
+        GuiHandler.open(ContainerForgeAnvil.NAME, playerIn, pos)
         return true
     }
 }

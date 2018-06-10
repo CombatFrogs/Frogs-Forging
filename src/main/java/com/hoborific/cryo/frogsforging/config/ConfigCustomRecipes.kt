@@ -19,7 +19,7 @@ class ConfigCustomRecipes private constructor() {
     }
 
     fun initializeRecipes(e: FMLPreInitializationEvent) {
-        val configurationFile = File(e.modConfigurationDirectory, "smithcrafting_recipes.json")
+        val configurationFile = File(e.modConfigurationDirectory, "frogsforging_recipes.json")
         if (!configurationFile.exists()) configurationFile.createNewFile()
 
         val configRoot = JsonParser().parse(FileReader(configurationFile)) as? JsonObject ?: return

@@ -8,10 +8,10 @@ import net.minecraftforge.fml.relauncher.SideOnly
 
 object ModItemRegistry {
 
-    @GameRegistry.ObjectHolder("smithcrafting:iron_pickaxe")
+    @GameRegistry.ObjectHolder("frogsforging:iron_pickaxe")
     var itemSmithedPickaxe: ItemSmithedPickaxe? = null
 
-    @GameRegistry.ObjectHolder("smithcrafting:forge_hammer")
+    @GameRegistry.ObjectHolder("frogsforging:forge_hammer")
     var itemForgeHammer: ItemForgeHammer? = null
 
     @SideOnly(Side.CLIENT)

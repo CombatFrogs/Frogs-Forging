@@ -15,15 +15,15 @@ import com.teamwizardry.librarianlib.features.sprite.Texture
 import net.minecraft.util.ResourceLocation
 import kotlin.math.ceil
 
-const val improvedAnvilRegistryName = "improved_forge_anvil"
+const val forgeAnvilRegistryName = "forge_anvil"
 
 /**
  * Gui variant of the Forge Anvil container, used to render the Anvil interface to the player. Displays the player's
  * inventory and hotbat, as well as the Anvil's three inventory slots, buttons to perform forging techniques and a
  * progress bar which indicates how close the player is to successfully forging the desired tool.
  */
-class GuiContainerImprovedAnvil(
-    private val anvilContainer: ContainerImprovedAnvil
+class GuiContainerForgeAnvil(
+    private val anvilContainer: ContainerForgeAnvil
 ) : GuiContainerBase(
     anvilContainer,
     WIDTH,
@@ -148,7 +148,7 @@ class GuiContainerImprovedAnvil(
         }
     }
 
-    private fun addPlayerInventory(container: ContainerImprovedAnvil) {
+    private fun addPlayerInventory(container: ContainerForgeAnvil) {
         for (row in 0..2) {
             for (col in 0..8) {
                 val x = playerSlotsHorizontalOffset + col * itemTextureDimensionWithSeparator
@@ -171,7 +171,7 @@ class GuiContainerImprovedAnvil(
         private const val BUTTON_HEIGHT = 16
 
         private val spriteSheet =
-            Texture(ResourceLocation(FrogsForgingMod.MODID, "textures/gui/improved_forge_anvil.png"))
+            Texture(ResourceLocation(FrogsForgingMod.MODID, "textures/gui/forge_anvil.png"))
         private val background = spriteSheet.getSprite(
             "background",
             WIDTH,

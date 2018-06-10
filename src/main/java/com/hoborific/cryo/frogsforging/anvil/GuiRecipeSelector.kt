@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import java.util.HashMap
 
-class ContainerRecipeSelector(player: EntityPlayer, internal val anvilTile: TileEntityImprovedAnvil) :
+class ContainerRecipeSelector(player: EntityPlayer, internal val anvilTile: TileEntityForgeAnvil) :
     ContainerBase(player) {
     companion object {
         val NAME = ResourceLocation("frogsforging:plan_selection_gui")
@@ -26,7 +26,7 @@ class ContainerRecipeSelector(player: EntityPlayer, internal val anvilTile: Tile
                 { player, _, tile ->
                     ContainerRecipeSelector(
                         player,
-                        tile as TileEntityImprovedAnvil
+                        tile as TileEntityForgeAnvil
                     )
                 },
                 { _, container -> GuiRecipeSelector(container) })

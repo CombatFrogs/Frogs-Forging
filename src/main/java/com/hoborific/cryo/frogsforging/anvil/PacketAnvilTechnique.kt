@@ -45,7 +45,7 @@ class PacketAnvilTechnique() : PacketBase() {
         val player = ctx.serverHandler.player ?: return
         val anvilBlock = player.world.getTileEntity(blockPos)
 
-        if (anvilBlock == null || anvilBlock !is TileEntityImprovedAnvil) {
+        if (anvilBlock == null || anvilBlock !is TileEntityForgeAnvil) {
             FrogsForgingMod.logger?.debug(
                 "Received Anvil technique packet at position (%d, %d, %d) from player %s but tile entity does not exist.".format(
                     blockPos.x,

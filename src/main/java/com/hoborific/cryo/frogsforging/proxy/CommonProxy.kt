@@ -1,6 +1,6 @@
 package com.hoborific.cryo.frogsforging.proxy
 
-import com.hoborific.cryo.frogsforging.anvil.BlockImprovedAnvil
+import com.hoborific.cryo.frogsforging.anvil.BlockForgeAnvil
 import com.hoborific.cryo.frogsforging.anvil.PacketAnvilTechnique
 import com.hoborific.cryo.frogsforging.items.ItemForgeHammer
 import com.hoborific.cryo.frogsforging.items.ItemSmithedPickaxe
@@ -40,7 +40,7 @@ open class CommonProxy {
         @JvmStatic
         @SubscribeEvent
         fun registerBlocks(event: RegistryEvent.Register<Block>) {
-            event.registry.register(BlockImprovedAnvil())
+            event.registry.register(BlockForgeAnvil())
         }
     }
 }

@@ -10,10 +10,10 @@ import net.minecraft.util.ResourceLocation
 /**
  *
  */
-class ContainerImprovedAnvil(player: EntityPlayer, internal val anvilTile: TileEntityImprovedAnvil) :
+class ContainerForgeAnvil(player: EntityPlayer, internal val anvilTile: TileEntityForgeAnvil) :
     ContainerBase(player) {
     val invPlayer = BaseWrappers.player(player)
-    val invBlock = InventoryWrapperImprovedAnvil(anvilTile)
+    val invBlock = InventoryWrapperForgeAnvil(anvilTile)
 
     init {
         addSlots(invPlayer)
@@ -30,12 +30,12 @@ class ContainerImprovedAnvil(player: EntityPlayer, internal val anvilTile: TileE
             GuiHandler.registerBasicContainer(
                 NAME,
                 { player, _, tile ->
-                    ContainerImprovedAnvil(
+                    ContainerForgeAnvil(
                         player,
-                        tile as TileEntityImprovedAnvil
+                        tile as TileEntityForgeAnvil
                     )
                 },
-                { _, container -> GuiContainerImprovedAnvil(container) })
+                { _, container -> GuiContainerForgeAnvil(container) })
         }
     }
 }
@@ -43,6 +43,6 @@ class ContainerImprovedAnvil(player: EntityPlayer, internal val anvilTile: TileE
 /**
  * Simple wrapper for the Forge Anvil tile entity that allows other objects to manipulate its inventory.
  */
-class InventoryWrapperImprovedAnvil(anvilTile: TileEntityImprovedAnvil) : InventoryWrapper(anvilTile) {
+class InventoryWrapperForgeAnvil(anvilTile: TileEntityForgeAnvil) : InventoryWrapper(anvilTile) {
     val main = slots[0..2]
 }
